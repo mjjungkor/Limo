@@ -12,7 +12,7 @@ class Student(Person):
         return super().get_age() - 1
 
     def __str__(self): #객체를 출력했을때 지정된 형태로 출력
-        return f'override Student instance'
+        return f'override Student instance'    
 
 
 
