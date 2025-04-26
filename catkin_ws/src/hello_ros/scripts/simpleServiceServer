@@ -1,0 +1,43 @@
+import rospy, time
+import threading
+from std_srvs.srv import SetBool, SetBoolResponse, SetBoolRequest
+
+class ServiceServer:
+    def __init__(self):
+        self.srv=rospy.Service('setBool',SetBool, self.setBool_callback)
+        self.bool = False
+        rospy.Timer(rospy.Duration(nsecs=500_000_000), self.print_state)
+        self.i=0
+
+    def setBool_callback(self, request:SetBoolRequest):
+        response=SetBoolResponse()
+        thread = threading.Thread(target=self.ansyc_service, args=(request,response))
+        thread.start()
+        self.i+=1
+        thread.join()
+        return response 
+
+    def ansyc_service(self, request,response):
+        #서버가 처리하는 코드
+        j=self.i
+        rospy.loginfo(f'begin service process...{j}')
+        self.bool = request.data
+        response.message='변경 완료!'
+        response.success=True
+        time.sleep(5)
+        rospy.loginfo(f'end service process...{j}')
+    
+    def print_state(self, _event):
+        rospy.loginfo(f'main thread...')
+    
+
+def main():
+    rospy.init_node('service_server')
+    node=ServiceServer()
+    try:
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
+
+if __name__=='__main__':
+    main()

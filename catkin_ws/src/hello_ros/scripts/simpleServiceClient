@@ -1,0 +1,31 @@
+import rospy, time
+from std_srvs.srv import SetBool, SetBoolResponse, SetBoolRequest
+
+class ServiceClient:
+    def __init__(self):
+        self.client=rospy.ServiceProxy('setBool', SetBool)
+        while not rospy.is_shutdown():
+            try:
+                self.client.wait_for_service(timeout=1.0) # 클라이언트가 서버에 접속을 시도했을때 응답을 대기하는 시간
+                break
+            except rospy.ROSException:
+                rospy.loginfo(f'server is not ready!')
+
+    def send_request(self):
+        data=SetBoolRequest()
+        data.data=True
+        response :SetBoolResponse = self.client.call(data) # 연결된 서버에 실제 데이터를 전송하는 시점(동기처리, 서버쪽에서 처리가 완료될때까지 대기)
+        rospy.loginfo(f'{response.message}')
+        rospy.loginfo(f'{response.success}')
+
+
+def main():
+    rospy.init_node('service_client')
+    node=ServiceClient()
+    node.send_request() # 단일 처리 하는 곳에 사용
+
+    while not rospy.is_shutdown():
+        rospy.spin() # subscription & timer 처리
+
+if __name__=='__main__':
+    main()
