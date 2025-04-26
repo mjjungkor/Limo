@@ -1,0 +1,26 @@
+import rospy
+from std_msgs.msg import String
+
+class Mpub:
+    def __init__(self):
+        self.i=0
+        self.sndData=String()
+        self.pub = rospy.Publisher('message', String, queue_size=10)
+        rospy.Timer(rospy.Duration(nsecs=330_000_000),self.print_msg) 
+
+    def print_msg(self, _envet):
+        self.sndData.data=f"mpub :{self.i}"
+        self.pub.publish(self.sndData)
+        self.i+=1
+
+def main():
+    rospy.init_node('mpub')
+    node=Mpub()
+    while not rospy.is_shutdown():
+        rospy.spin()
+
+if __name__=='__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass

@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import rospy
+from std_msgs.msg import Header, String
+
+class MTsub:
+    def __init__(self):
+        rospy.Subscriber('time',Header, self.sub_callback)
+        rospy.Subscriber('message',String, self.sub_callback2)
+
+    def sub_callback(self, msg:Header):
+        rospy.loginfo(f'rcv msg(mtsub): {msg.frame_id}')
+        rospy.loginfo(f'rcv time: {msg.stamp.secs}')
+
+    def sub_callback2(self, msg:String):
+        rospy.loginfo(f'rcv msg2(mtsub): {msg.data}')
+
+def main():
+    rospy.init_node('mtsub')
+    node=MTsub()
+    while not rospy.is_shutdown():
+        rospy.spin()
+
+if __name__=='__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass

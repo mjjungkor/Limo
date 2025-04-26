@@ -1,0 +1,25 @@
+import rospy
+from std_msgs.msg import String
+
+class Msub2:
+    def __init__(self):
+        rospy.Subscriber('message',String, self.sub_callback)
+        rospy.Subscriber('message2',String, self.sub_callback2)
+
+    def sub_callback(self, msg:String):
+        rospy.loginfo(f'rcv msg(msub2): {msg.data}')
+
+    def sub_callback2(self, msg:String):
+        rospy.loginfo(f'rcv msg2(msub2): {msg.data}')
+
+def main():
+    rospy.init_node('msub2')
+    node=Msub2()
+    while not rospy.is_shutdown():
+        rospy.spin()
+
+if __name__=='__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
