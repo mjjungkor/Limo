@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'hello_ros=hello_ros2.hello_ros:main'
+            'hello_ros=hello_ros2.hello_ros:main',
+            'simple_service_server=hello_ros2.simple_service_server:main'
         ],
     },
 )
