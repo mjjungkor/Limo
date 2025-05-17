@@ -1,0 +1,53 @@
+import rospy, time
+import threading
+from hello_ros.srv import AddTwoInts, AddTwoIntsRequest, AddTwoIntsResponse
+
+class ServiceServer:
+    def __init__(self):
+        self.srv=rospy.Service('add_two_int',AddTwoInts, self.callback)
+        rospy.Timer(rospy.Duration(nsecs=500_000_000), self.print_state)
+        self.i=0
+
+    def callback(self, request:AddTwoIntsRequest):
+        response=AddTwoIntsResponse()
+        thread = threading.Thread(target=self.ansyc_service, args=(request,response))
+        thread.start()
+        thread.join()
+        return response 
+
+    def ansyc_service(self, request: AddTwoIntsRequest, response: AddTwoIntsResponse):
+        #서버가 처리하는 코드
+        j=self.i
+        rospy.loginfo(f'begin service process...{j}')
+        
+        if request.op == 'plus':
+            response.result = request.a + request.b
+            response.message = '처리 성공'
+            response.success=True
+        elif request.op == 'minus':
+            response.result = request.a - request.b
+            response.message = '처리 성공'
+            response.success=True
+        else:
+            response.result = 0
+            response.message = '처리 불가 op 코드'
+            response.success=False
+
+        time.sleep(3)
+        rospy.loginfo(f'end service process...{j}')
+        self.i=j+1
+    
+    def print_state(self, _event):
+        rospy.loginfo(f'main thread...')
+    
+
+def main():
+    rospy.init_node('service_server')
+    node=ServiceServer()
+    try:
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
+
+if __name__=='__main__':
+    main()
