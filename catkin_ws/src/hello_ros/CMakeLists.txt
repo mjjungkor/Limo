@@ -10,9 +10,34 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
+  actionlib
+  actionlib_msgs
 )
 
 catkin_python_setup()
+
+
+add_message_files(
+  FILES
+  MyTopic.msg
+)
+
+add_service_files(
+  FILES
+  AddTwoInts.srv
+)
+
+add_action_files(
+  FILES
+  TimeWait.action
+)
+
+generate_messages(
+  DEPENDENCIES 
+  std_msgs
+  actionlib_msgs
+)
 
 catkin_package()
 
@@ -27,6 +52,9 @@ catkin_install_python(PROGRAMS
   scripts/simpleServiceServer
   scripts/simpleServiceClient
   scripts/simpleServiceClient2
+  scripts/myTopicpub
+  scripts/addServer
+  scripts/addClient
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
