@@ -1,0 +1,53 @@
+# rosrun hello_ros timeActionServer 
+
+import rospy, time
+import threading
+import actionlib
+from hello_ros.msg import TimeWaitAction, TimeWaitGoal, TimeWaitFeedback, TimeWaitResult
+
+class ActionServer:
+    def __init__(self):
+        self.server=actionlib.SimpleActionServer('time_action', TimeWaitAction, self.callback, False)
+        self.server.start()
+        rospy.loginfo(f'begin action service process!')
+
+    def callback(self,  goal: TimeWaitGoal):
+        # Goal 수신
+        feedback=TimeWaitFeedback()
+        result=TimeWaitResult()
+        rate=rospy.Rate(1)
+        time_elapsed=0.0
+        updates=0
+
+        rospy.loginfo(f'receive the message from client : {goal.time_to_wait} 초 동안 대기')
+
+        while time_elapsed < goal.time_to_wait:
+            if self.server.preempt_request or rospy.is_shutdown():
+                rospy.loginfo("TimeWait 액션 이 프리 엠티 되었다.")
+                self.server.set_preempted()
+                return
+            
+            time_elapsed+=1.0
+            feedback.time_elapsed=time_elapsed
+            feedback.time_remaining=goal.time_to_wait-time_elapsed
+            self.server.publish_feedback(feedback) # feedback 실시
+            updates+=1
+            rate.sleep()
+        
+        # result 데이터 준비
+        result.time_elapsed=time_elapsed
+        result.updates_sent=updates
+        rospy.loginfo(f'timewait 완료!')
+        self.server.set_succeeded(result) # result 전송   
+    
+
+def main():
+    rospy.init_node('action_server')
+    node=ActionServer()
+    try:
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
+
+if __name__=='__main__':
+    main()

@@ -52,14 +52,19 @@ catkin_install_python(PROGRAMS
   scripts/simpleServiceServer
   scripts/simpleServiceClient
   scripts/simpleServiceClient2
+  scripts/simpleParameter
   scripts/myTopicpub
   scripts/addServer
   scripts/addClient
+  scripts/timeActionServer
+  scripts/timeActionClient
+  scripts/timeActionClient2
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 install(DIRECTORY
   launch
+  param
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
