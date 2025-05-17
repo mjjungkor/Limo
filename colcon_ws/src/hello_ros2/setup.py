@@ -31,6 +31,7 @@ setup(
             'simple_service_client=hello_ros2.simple_service_client:main',
             'simple_parameter=hello_ros2.simple_parameter:main',
             'change_color_client=hello_ros2.change_color_client:main',
+            'my_topic_pub=hello_ros2.my_topic_pub:main',
         ],
     },
 )
