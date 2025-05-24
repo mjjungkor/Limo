@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import find_packages, setup
 
-package_name = 'limo_description'
+package_name = 'mylimo_description'
 
 setup(
     name=package_name,
@@ -15,9 +15,9 @@ setup(
 
         ('share/' + package_name + '/launch',
          glob(os.path.join('launch','*.launch.py'))),
-         
+
         ('share/' + package_name + '/urdf',
-         glob(os.path.join('urdf','*.urdf'))),
+         glob(os.path.join('urdf','*.*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
