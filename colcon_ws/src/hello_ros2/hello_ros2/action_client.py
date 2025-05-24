@@ -59,7 +59,7 @@ class Action_client(Node):
 
 
 
-    def execute_callback(self, goal_handle):
+    def execute_callback(self, goal_handle):#server쪽 코드로 불필요코드
         #goal
         request:Fibonacci.Goal=goal_handle.request
         self.get_logger().info(f"{request.step}")
