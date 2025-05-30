@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- ros2 launch mylimo_description display.launch.py model:=urdf/model.xacro -->
 <robot xmlns:xacro="http://www.ros-org/wiki/xacro" name="myfirst">
     <xacro:property name="width" value="0.2" />
     <xacro:property name="bodylen" value="0.6" />
