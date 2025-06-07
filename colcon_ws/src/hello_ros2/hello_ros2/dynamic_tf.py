@@ -3,7 +3,7 @@ import rclpy.logging
 from rclpy.node import Node
 from geometry_msgs.msg import TransformStamped
 from tf2_ros.transform_broadcaster import TransformBroadcaster
-from tf_transformations import quaternion_from_euler
+from tf_transformations import quaternion_from_euler # sudo apt install ros-humble-tf-transformations
 
 class DynamicFramePublisher(Node):
     def __init__(self):
